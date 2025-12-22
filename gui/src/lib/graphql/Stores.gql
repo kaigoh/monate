@@ -1,0 +1,19 @@
+query Stores {
+  stores {
+    id
+    name
+    slug
+    publicUrl
+    theme {
+      primaryColor
+      accentColor
+      headline
+      customCopy
+      showFiatAmount
+      showTicker
+      presetAmounts
+      backgroundUrl
+      logoUrl
+    }
+  }
+}

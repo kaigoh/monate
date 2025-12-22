@@ -1,0 +1,16 @@
+query Invoices($storeId: ID!) {
+  invoices(storeId: $storeId) {
+    id
+    description
+    reference
+    amountAtomic
+    fiatAmount
+    currency
+    status
+    complete
+    coveredTotal
+    moneroPayAddress
+    createdAt
+    resolvedAt
+  }
+}

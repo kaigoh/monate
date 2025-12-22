@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  monate:
+    build: .
+    depends_on:
+      - moneropay
+    env_file: .env
+    environment:
+      PORT: ${MONATE_PORT}
+      MONATE_DB_DSN: ${MONATE_DB_DSN}
+      MONATE_PUBLIC_BASE_URL: ${MONATE_PUBLIC_BASE_URL}
+      MONATE_MANUAL_CHECK_INTERVAL: ${MONATE_MANUAL_CHECK_INTERVAL}
+      MONATE_UI_DEV_SERVER_URL: ${MONATE_UI_DEV_SERVER_URL}
+    ports:
+      - "${MONATE_PORT}:8080"
+    volumes:
+      - monate_data:/data
+    networks:
+      - monate_net
+
+  moneropay:
+    image: ghcr.io/moneropay/moneropay:latest
+    depends_on:
+      - monero-wallet-rpc
+    env_file: .env
+    environment:
+      MONEROD_ENDPOINT: ${MONEROD_RPC_ENDPOINT}
+      WALLET_RPC_ENDPOINT: http://monero-wallet-rpc:${MONERO_WALLET_RPC_BIND_PORT}/json_rpc
+      API_TOKEN: ${MONEROPAY_API_TOKEN}
+      CALLBACK_BASE_URL: ${MONEROPAY_CALLBACK_BASE}
+    ports:
+      - "8081:8081"
+    volumes:
+      - moneropay_data:/var/lib/moneropay
+    networks:
+      - monate_net
+
+  monero-wallet-rpc:
+    image: ghcr.io/monero-project/monero:latest
+    env_file: .env
+    command: >-
+      monero-wallet-rpc
+      --rpc-bind-ip=0.0.0.0
+      --rpc-bind-port=${MONERO_WALLET_RPC_BIND_PORT}
+      --disable-rpc-login=0
+      --rpc-login=${MONERO_WALLET_RPC_USERNAME}:${MONERO_WALLET_RPC_PASSWORD}
+      --wallet-file=/wallet/${MONERO_WALLET_RPC_WALLET_FILE}
+      --password=${MONERO_WALLET_RPC_WALLET_PASSWORD}
+      --daemon-address=${MONEROD_RPC_ENDPOINT}
+      --confirm-external-bind
+      --trusted-daemon
+    ports:
+      - "${MONERO_WALLET_RPC_BIND_PORT}:${MONERO_WALLET_RPC_BIND_PORT}"
+    volumes:
+      - wallet_data:/wallet
+    networks:
+      - monate_net
+
+volumes:
+  monate_data:
+  wallet_data:
+  moneropay_data:
+
+networks:
+  monate_net:
+    driver: bridge

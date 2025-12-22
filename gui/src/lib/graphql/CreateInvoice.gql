@@ -1,0 +1,11 @@
+mutation CreateInvoice($input: CreateInvoiceInput!) {
+  createInvoice(input: $input) {
+    id
+    moneroPayAddress
+    status
+    amountAtomic
+    fiatAmount
+    currency
+    createdAt
+  }
+}

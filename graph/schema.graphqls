@@ -1,0 +1,104 @@
+scalar DateTime
+scalar Int64
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  EXPIRED
+  CANCELED
+}
+
+type ThemeSettings {
+  primaryColor: String!
+  accentColor: String!
+  backgroundUrl: String
+  logoUrl: String
+  headline: String
+  customCopy: String
+  showFiatAmount: Boolean!
+  showTicker: Boolean!
+  presetAmounts: [Int!]!
+}
+
+type Store {
+  id: ID!
+  name: String!
+  slug: String!
+  publicUrl: String!
+  theme: ThemeSettings!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Invoice {
+  id: ID!
+  storeId: ID!
+  store: Store!
+  description: String
+  reference: String
+  amountAtomic: Int64!
+  expectedAmount: Int64!
+  currency: String!
+  fiatAmount: Float!
+  moneroPayAddress: String!
+  status: InvoiceStatus!
+  complete: Boolean!
+  coveredTotal: Int64!
+  coveredUnlocked: Int64!
+  manualCheckCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  resolvedAt: DateTime
+}
+
+type Query {
+  stores: [Store!]!
+  store(id: ID!): Store
+  invoices(storeId: ID!): [Invoice!]!
+  invoice(id: ID!): Invoice
+}
+
+input ThemeSettingsInput {
+  primaryColor: String
+  accentColor: String
+  backgroundUrl: String
+  logoUrl: String
+  headline: String
+  customCopy: String
+  showFiatAmount: Boolean
+  showTicker: Boolean
+  presetAmounts: [Int!]
+}
+
+input CreateStoreInput {
+  name: String!
+  slug: String!
+  publicUrl: String!
+  moneroPayEndpoint: String!
+  moneroPayApiKey: String!
+  theme: ThemeSettingsInput
+}
+
+input UpdateStoreThemeInput {
+  storeId: ID!
+  theme: ThemeSettingsInput!
+}
+
+input CreateInvoiceInput {
+  storeId: ID!
+  amountAtomic: Int64!
+  fiatAmount: Float!
+  currency: String!
+  description: String
+  reference: String
+}
+
+type Mutation {
+  createStore(input: CreateStoreInput!): Store!
+  updateStoreTheme(input: UpdateStoreThemeInput!): Store!
+  createInvoice(input: CreateInvoiceInput!): Invoice!
+}
+
+type Subscription {
+  invoiceStatus(invoiceId: ID!): Invoice!
+}

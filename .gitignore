@@ -1,0 +1,17 @@
+# Build cache
+.gocache
+
+# UI artifacts
+/gui/node_modules
+/gui/.svelte-kit
+/gui/build
+/gui/dist
+/web/dist/
+
+# Editor + OS
+.DS_Store
+.idea
+.vscode
+
+# Env files
+.env
