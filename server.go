@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -32,6 +33,10 @@ import (
 )
 
 func main() {
+	if err := loadEnvFile(".env"); err != nil {
+		log.Fatalf("failed to load .env: %v", err)
+	}
+
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
@@ -179,4 +184,46 @@ func moneroPayWebhookHandler(db *gorm.DB, n *notifier.InvoiceNotifier) http.Hand
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte(`{"status":"ok"}`))
 	})
+}
+
+func loadEnvFile(path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		sep := strings.IndexRune(line, '=')
+		if sep <= 0 {
+			continue
+		}
+
+		key := strings.TrimSpace(line[:sep])
+		if key == "" {
+			continue
+		}
+
+		value := strings.TrimSpace(line[sep+1:])
+		if len(value) >= 2 {
+			if (value[0] == '"' && value[len(value)-1] == '"') || (value[0] == '\'' && value[len(value)-1] == '\'') {
+				value = value[1 : len(value)-1]
+			}
+		}
+
+		if _, exists := os.LookupEnv(key); !exists {
+			_ = os.Setenv(key, value)
+		}
+	}
+
+	return scanner.Err()
 }

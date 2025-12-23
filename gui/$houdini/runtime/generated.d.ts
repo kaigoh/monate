@@ -1,8 +1,8 @@
 import type { Record } from "./public/record";
-import { Invoices$result, Invoices$input } from "$houdini/artifacts/Invoices";
-import { InvoicesStore } from "../plugins/houdini-svelte/stores/Invoices";
 import { Stores$result, Stores$input } from "$houdini/artifacts/Stores";
 import { StoresStore } from "../plugins/houdini-svelte/stores/Stores";
+import { Invoices$result, Invoices$input } from "$houdini/artifacts/Invoices";
+import { InvoicesStore } from "../plugins/houdini-svelte/stores/Invoices";
 
 export declare type CacheTypeDef = {
     types: {
@@ -194,5 +194,5 @@ export declare type CacheTypeDef = {
         };
     };
     lists: {};
-    queries: [[StoresStore, Stores$result, Stores$input], [InvoicesStore, Invoices$result, Invoices$input]];
+    queries: [[InvoicesStore, Invoices$result, Invoices$input], [StoresStore, Stores$result, Stores$input]];
 };

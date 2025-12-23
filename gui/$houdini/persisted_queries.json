@@ -1,5 +1,5 @@
 {
-    "69fb3630673c7d3673c1b143327a00390ffb98fa8ed97139598b0ba281f43bac": "query Stores {\n  stores {\n    id\n    name\n    slug\n    publicUrl\n    theme {\n      primaryColor\n      accentColor\n      headline\n      customCopy\n      showFiatAmount\n      showTicker\n      presetAmounts\n      backgroundUrl\n      logoUrl\n    }\n  }\n}",
     "0cea6fca4ec8d78027ec3bc75548bc201501d8153b817ee7ad8505f7ed449d9a": "query Invoices($storeId: ID!) {\n  invoices(storeId: $storeId) {\n    id\n    description\n    reference\n    amountAtomic\n    fiatAmount\n    currency\n    status\n    complete\n    coveredTotal\n    moneroPayAddress\n    createdAt\n    resolvedAt\n  }\n}",
+    "69fb3630673c7d3673c1b143327a00390ffb98fa8ed97139598b0ba281f43bac": "query Stores {\n  stores {\n    id\n    name\n    slug\n    publicUrl\n    theme {\n      primaryColor\n      accentColor\n      headline\n      customCopy\n      showFiatAmount\n      showTicker\n      presetAmounts\n      backgroundUrl\n      logoUrl\n    }\n  }\n}",
     "eb64334b4727f6a957f6cf301c1e8c98c4bd639e1c5c458b69bd9ce204fda464": "mutation CreateInvoice($input: CreateInvoiceInput!) {\n  createInvoice(input: $input) {\n    id\n    moneroPayAddress\n    status\n    amountAtomic\n    fiatAmount\n    currency\n    createdAt\n  }\n}"
 }

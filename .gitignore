@@ -15,3 +15,7 @@
 
 # Env files
 .env
+
+# Local sqlite databases
+/monate.db
+/monate-dev.db

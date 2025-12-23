@@ -44,6 +44,8 @@ go run ./...
 ```
 
 > Requires [Bun](https://bun.sh/) v1.1+ for UI builds.
+> Monate automatically loads environment variables from `.env` (if present) so
+> your local configuration can live there without exporting each variable.
 
 The GraphQL Playground lives at http://localhost:8080/ and the HTTP endpoint is
 `POST /query`. The Houdini/SvelteKit UI is served from `/`, and
